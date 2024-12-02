@@ -1,0 +1,1 @@
+# nim-kserve-model-registry
