@@ -1,0 +1,63 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  name: nvidia-nim-llama3-8b-instruct-1.0.3
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: "8002"
+    serving.knative.openshift.io/enablePassthrough: "true"
+    sidecar.istio.io/inject: "true"
+    sidecar.istio.io/rewriteAppHTTPProbers: "true"
+  containers:
+    - env:
+        - name: NIM_CACHE_PATH
+          value: /mnt/models/
+        - name: NGC_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: NGC_API_KEY
+              name: nvidia-nim-secrets
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: AWS_ACCESS_KEY_ID
+              name: aws-secrets
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: AWS_SECRET_ACCESS_KEY
+              name: aws-secrets
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              key: AWS_REGION
+              name: aws-secrets
+      image: nvcr.io/nim/meta/llama3-8b-instruct:1.0.3
+      name: kserve-container
+      ports:
+        - containerPort: 8000
+          protocol: TCP
+      resources:
+        limits:
+          cpu: "12"
+          memory: 256Gi
+        requests:
+          cpu: "12"
+          memory: 128Gi
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: dshm
+  imagePullSecrets:
+    - name: ngc-secret
+  protocolVersions:
+    - v2
+    - grpc-v2
+  supportedModelFormats:
+    - name: nvidia-nim-llama3-8b-instruct
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 128Gi
+      name: dshm

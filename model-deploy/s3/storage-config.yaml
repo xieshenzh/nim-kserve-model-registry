@@ -1,0 +1,7 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: storage-config
+stringData:
+  aws-secrets: '{"access_key_id":"<AWS_ACCESS_KEY_ID>","bucket":"<AWS_S3_BUCKET>","default_bucket":"<AWS_S3_BUCKET>","endpoint_url":"<AWS_S3_ENDPOINT>","region":"<AWS_REGION>","secret_access_key":"<AWS_SECRET_ACCESS_KEY>","type":"s3"}'
+type: Opaque
