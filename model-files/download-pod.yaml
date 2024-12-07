@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: llama3-8b-instruct
+  name: download-pod
 spec:
   containers:
     - name: kserve-container
@@ -16,12 +16,8 @@ spec:
               name: nvidia-nim-secrets
       resources:
         limits:
-          cpu: "12"
-          memory: 32Gi
           nvidia.com/gpu: "1"
         requests:
-          cpu: "12"
-          memory: 32Gi
           nvidia.com/gpu: "1"
       volumeMounts:
         - mountPath: /dev/shm

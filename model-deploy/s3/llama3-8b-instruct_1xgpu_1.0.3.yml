@@ -4,6 +4,7 @@ kind: InferenceService
 metadata:
   annotations:
     autoscaling.knative.dev/target: "10"
+    storage.kserve.io/readonly: "false"
   name: llama3-8b-instruct-1xgpu
 spec:
   predictor:
